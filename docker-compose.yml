@@ -16,6 +16,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+      - taskflow
 
   redis:
     image: redis:7-alpine
@@ -26,6 +28,8 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+    networks:
+      - taskflow
 
   backend:
     build: ./backend
@@ -40,6 +44,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    networks:
+      - taskflow
 
   frontend:
     build: ./frontend
@@ -49,6 +55,11 @@ services:
       - "8080:80"
     depends_on:
       - backend
+    networks:
+      - taskflow
 
 volumes:
   postgres_data:
+
+networks:
+  taskflow:
